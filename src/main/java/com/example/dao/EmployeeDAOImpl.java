@@ -107,7 +107,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     private Employee buildEmpl(ResultSet resultSet) throws SQLException, DataAccessException{
         return Employee.builder().
-                department_id(resultSet.getLong(EMPLOYEE_ID)).
+                employee_id(resultSet.getLong(EMPLOYEE_ID)).
                 first_name(resultSet.getString(FIRST_NAME)).
                 last_name(resultSet.getString(LAST_NAME)).
                 department_id(resultSet.getLong(DEPARTMENT_ID)).
