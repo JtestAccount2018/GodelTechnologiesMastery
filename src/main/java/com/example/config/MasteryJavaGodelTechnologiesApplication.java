@@ -1,8 +1,7 @@
-package com.example.mastery_java_godel_technologies;
+package com.example.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(scanBasePackages = "com.example")
 public class MasteryJavaGodelTechnologiesApplication {

@@ -1,7 +1,6 @@
-package com.example.mastery_java_godel_technologies;
-import com.example.dao.EmployeeDAOImpl;
+package com.example.config;
+import com.example.dao.EmployeeDAO;
 import com.example.dto.Employee;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MasteryJavaGodelTechnologiesApplicationTests {
 
 @Autowired
-    EmployeeDAOImpl dao;
+EmployeeDAO dao;
 
 
     @Test
-    void contextLoads() {
+    void getAllEmployeeTest() {
         List<Employee> list = dao.getAllEmployee();
         assertTrue(list.size()>0);
         list.forEach(l-> log.info(l.toString()));

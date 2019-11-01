@@ -15,15 +15,17 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 @PropertySource("classpath:/EmployeeDao.properties")
+@EnableTransactionManagement
 
 @Component
 @Repository
@@ -73,7 +75,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public long addEmployee(Employee employee) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource parameterSource =  getParameters(employee);
-        template.update(addEmplSql, parameterSource, keyHolder);
+        template.update(addEmplSql, parameterSource, keyHolder, new String[]{"employee_id"});
         return keyHolder.getKey().longValue();
     }
 

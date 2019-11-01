@@ -28,6 +28,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+
+        <!--HAVE TO ADD ACTUATOR!!!!!! property in application file does not work-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
