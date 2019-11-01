@@ -75,7 +75,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public long addEmployee(Employee employee) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource parameterSource =  getParameters(employee);
-        template.update(addEmplSql, parameterSource, keyHolder, new String[]{"employee_id"});
+        template.update(addEmplSql, parameterSource, keyHolder, new String[]{EMPLOYEE_ID});
         return keyHolder.getKey().longValue();
     }
 
