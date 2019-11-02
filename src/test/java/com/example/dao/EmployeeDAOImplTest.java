@@ -20,8 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 @Sql({"/schema.sql", "/data.sql"})
 @Log4j2
-@ContextConfiguration(classes = MasteryJavaGodelTechnologiesApplication.class)
-@SpringBootTest
+@SpringBootTest(classes = MasteryJavaGodelTechnologiesApplication.class)
 class EmployeeDAOImplTest {
 
     @Autowired
