@@ -1,2 +1,2 @@
 # GodelTechnologiesMastery
-This is the mastery progect to Godel Technologies company HR
+This is the mastery progect for Godel Technologies company HR
