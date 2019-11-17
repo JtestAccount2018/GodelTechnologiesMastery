@@ -1,6 +1,5 @@
 package com.example.service;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.example.ApplicationRunner;
@@ -9,15 +8,12 @@ import com.example.dto.Employee;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(classes = ApplicationRunner.class)
-@ExtendWith(SpringExtension.class)
 class EmployeeServiceImplTest {
 
   @Autowired
@@ -32,8 +28,7 @@ class EmployeeServiceImplTest {
   @Test
   void getAllEmployeeTest() {
     List<Employee> list;
-    Employee[] employees = new Employee[] {employee};
-    Mockito.doReturn(Arrays.asList(employees)).when(dao).getAllEmployee();
+    Mockito.doReturn(Arrays.asList(employee)).when(dao).getAllEmployee();
     list = service.getAllEmployee();
     assertTrue(list.size() == 1);
 
@@ -45,7 +40,7 @@ class EmployeeServiceImplTest {
     Employee result;
     Mockito.doReturn(employee).when(dao).getEmployeeById(1);
     result = service.getEmployeeById(1);
-    assertNotNull(result);
+    assertTrue(result.equals(employee));
   }
 
   @Test

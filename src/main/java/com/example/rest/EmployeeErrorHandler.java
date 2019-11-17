@@ -36,4 +36,5 @@ public class EmployeeErrorHandler {
     log.debug("rest: incorrect input data-" + e.getMessage());
     return "{\"response\" : \"Incorrect Input Data Error\" }";
   }
+
 }

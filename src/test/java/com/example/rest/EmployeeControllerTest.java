@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.ApplicationRunner;
 import com.example.dto.Employee;
 import com.example.dto.Gender;
 import com.example.service.EmployeeService;
@@ -23,21 +22,18 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(EmployeeController.class)
-@ContextConfiguration(classes = ApplicationRunner.class)
+
+@WebMvcTest(controllers = EmployeeController.class)
 class EmployeeControllerTest {
   @Autowired
   private MockMvc mvc;
+
 
   @MockBean
   EmployeeService service;
