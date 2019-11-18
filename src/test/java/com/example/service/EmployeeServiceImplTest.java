@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.example.ApplicationRunner;
 import com.example.dao.EmployeeDAO;
 import com.example.dto.Employee;
+import com.example.exceptions.DataNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class EmployeeServiceImplTest {
   Employee employee;
 
   @Test
-  void getAllEmployeeTest() {
+  void getAllEmployeeTest() throws DataNotFoundException {
     List<Employee> list;
     Mockito.doReturn(Arrays.asList(employee)).when(dao).getAllEmployee();
     list = service.getAllEmployee();
@@ -36,7 +37,7 @@ class EmployeeServiceImplTest {
   }
 
   @Test
-  void getEmployeeByIdTest() {
+  void getEmployeeByIdTest() throws DataNotFoundException {
     Employee result;
     Mockito.doReturn(employee).when(dao).getEmployeeById(1);
     result = service.getEmployeeById(1);
@@ -45,10 +46,10 @@ class EmployeeServiceImplTest {
 
   @Test
   void deleteEmployeeByIdTest() {
-    int result;
-    Mockito.doReturn(1).when(dao).deleteEmployeeById(1);
+    String result;
+    Mockito.doReturn("deleted").when(dao).deleteEmployeeById(1);
     result = service.deleteEmployeeById(1);
-    assertTrue(result == 1);
+    assertTrue(result.equals("deleted"));
   }
 
   @Test
@@ -61,8 +62,8 @@ class EmployeeServiceImplTest {
 
   @Test
   void updateEmployeeTest() {
-    int result;
-    Mockito.doReturn(1).when(dao).updateEmployee(employee);
+    long result;
+    Mockito.doReturn(1l).when(dao).updateEmployee(employee);
     result = service.updateEmployee(employee);
     assertTrue(result == 1);
   }

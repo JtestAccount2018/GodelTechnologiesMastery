@@ -44,7 +44,6 @@ class EmployeeControllerTest {
   private static void setEmployee() {
     employee =
         Employee.builder()
-            .employee_id(1)
             .first_name("Test")
             .last_name("test")
             .department_id(0)
@@ -52,6 +51,7 @@ class EmployeeControllerTest {
             .gender(Gender.FEMALE)
             .date_of_birth(new Date(new GregorianCalendar(1999, 10, 11).getTime().getTime()))
             .build();
+    employee.setEmployee_id(1);
   }
 
   @Test
@@ -88,7 +88,7 @@ class EmployeeControllerTest {
 
   @Test
   void editEmployeeTest() throws Exception {
-    given(service.updateEmployee(employee)).willReturn(1);
+    given(service.updateEmployee(employee)).willReturn(1l);
     mvc.perform(
             put("/main/employees/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -99,9 +99,9 @@ class EmployeeControllerTest {
 
   @Test
   void deleteEmployeeTest() throws Exception {
-    given(service.deleteEmployeeById(1)).willReturn(1);
+    given(service.deleteEmployeeById(1)).willReturn("success");
     mvc.perform(delete("/main/employees/1").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string(containsString("1")));
+        .andExpect(content().string(containsString("success")));
   }
 }

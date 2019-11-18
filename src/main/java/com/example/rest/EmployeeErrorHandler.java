@@ -1,5 +1,6 @@
 package com.example.rest;
 
+import com.example.exceptions.DataNotFoundException;
 import com.fasterxml.jackson.core.JsonParseException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataAccessException;
@@ -25,7 +26,7 @@ public class EmployeeErrorHandler {
   @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
   @ResponseBody
   public String incorrectDataError() {
-    log.debug("rest: incorrectDataError");
+    log.error("rest: incorrectDataError");
     return "{  \"response\" : \"Incorrect Data Error\" }";
   }
 
@@ -33,8 +34,16 @@ public class EmployeeErrorHandler {
   @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
   @ResponseBody
   public String incorrectJsonData(JsonParseException e) {
-    log.debug("rest: incorrect input data-" + e.getMessage());
+    log.error("rest: incorrect input data-" + e.getMessage());
     return "{\"response\" : \"Incorrect Input Data Error\" }";
+  }
+
+  @ExceptionHandler({DataNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public String dataNotFound(DataNotFoundException e){
+      log.error("Data not found exception with message: {}", e.getMessage());
+      return e.getLocalizedMessage();
   }
 
 }

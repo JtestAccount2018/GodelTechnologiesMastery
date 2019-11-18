@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.dao.EmployeeDAO;
 import com.example.dto.Employee;
+import com.example.exceptions.DataNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return List of Employee from database
    */
   @Override
-  public List<Employee> getAllEmployee() {
+  public List<Employee> getAllEmployee() throws DataNotFoundException {
     return dao.getAllEmployee();
   }
 
@@ -31,7 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return Employee entity from database
    */
   @Override
-  public Employee getEmployeeById(long id) {
+  public Employee getEmployeeById(long id) throws DataNotFoundException {
     return dao.getEmployeeById(id);
   }
 
@@ -42,7 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return Number of deleted records
    */
   @Override
-  public int deleteEmployeeById(long id) {
+  public String deleteEmployeeById(long id) {
     return dao.deleteEmployeeById(id);
   }
 
@@ -64,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return Number of updated records
    */
   @Override
-  public int updateEmployee(Employee employee) {
+  public long updateEmployee(Employee employee) {
     return dao.updateEmployee(employee);
   }
 }
