@@ -82,6 +82,7 @@ class EmployeeDAOImplTest {
             .gender(Gender.FEMALE)
             .date_of_birth(new Date(new GregorianCalendar(1962, 05, 02).getTime().getTime()))
             .build();
+        employee.setEmployee_id(1);
     assertTrue(dao.updateEmployee(employee) > 0);
   }
 }
