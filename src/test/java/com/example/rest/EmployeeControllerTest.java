@@ -77,13 +77,14 @@ class EmployeeControllerTest {
   @Test
   void addEmployeeTest() throws Exception {
 
-    given(service.addEmployee(employee)).willReturn(5l);
+    given(service.addEmployee(employee)).willReturn("Entity was send to queue");
     mvc.perform(
             post("/main/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(employee)))
         .andExpect(status().isCreated())
-        .andExpect(content().string(containsString("5")));
+        .andExpect(content().string(containsString("Entity was send to queue")));
+
   }
 
   @Test
