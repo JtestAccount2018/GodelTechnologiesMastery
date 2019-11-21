@@ -14,5 +14,5 @@ public interface EmployeeService {
 
   public String addEmployee(Employee employee);
 
-  public long updateEmployee(Employee employee);
+  public long updateEmployee(Employee employee) throws DataNotFoundException;
 }

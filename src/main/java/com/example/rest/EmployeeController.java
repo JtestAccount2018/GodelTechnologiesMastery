@@ -12,7 +12,7 @@ import java.util.List;
 
 @Log4j2
 @RestController
-@RequestMapping("/main")
+@RequestMapping("/")
 public class EmployeeController {
 
     @Autowired
@@ -40,7 +40,7 @@ public class EmployeeController {
 
     @PutMapping("/employees/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public long editEmployee(@PathVariable("id") long id, @RequestBody Employee employee) {
+    public long editEmployee(@PathVariable("id") long id, @RequestBody Employee employee) throws DataNotFoundException {
         employee.setEmployee_id(id);
         log.debug("rest: UPDATE  - {}", employee);
         return service.updateEmployee(employee);

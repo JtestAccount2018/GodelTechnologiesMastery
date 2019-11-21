@@ -34,27 +34,27 @@ class EmployeeDAOImplTest {
   private EmployeeDAO dao;
 
   @Test
-  void getAllEmployeeTest() throws DataNotFoundException {
+  void getAllEmployee_AssertGetThreeEmployeesFromTestDb_Test() throws DataNotFoundException {
     List<Employee> list = dao.getAllEmployee();
     assertTrue(list.size() == 3);
     list.forEach(employee -> log.info(employee));
   }
 
   @Test
-  void getEmployeeByIdTest() throws DataNotFoundException {
+  void getEmployeeById_AssertGetEmployeeWithId1FromTestDb_Test() throws DataNotFoundException {
     Employee employee = dao.getEmployeeById(1);
     assertNotNull(employee);
   }
 
   @Test
   @Rollback
-  void deleteEmployeeByIdTest() {
+  void deleteEmployeeById_AssertMessageDeletedWhenDeleteEmployeeFromTestDb_Test() {
     assertTrue(dao.deleteEmployeeById(1).equals("deleted"));
   }
 
   @Test
   @Rollback
-  void addEmployeeTest() {
+  void addEmployee_AssertReceiveIdGeneratedByDb_Test() {
     Employee employee =
         Employee.builder()
             .first_name("test")
@@ -72,7 +72,7 @@ class EmployeeDAOImplTest {
 
   @Test
   @Rollback
-  void updateEmployeeTest() {
+  void updateEmployee_AssertReceiveNumberOfUpdatedRecordsInDb_Test() throws DataNotFoundException {
     Employee employee =
         Employee.builder()
             .first_name("test")

@@ -6,8 +6,8 @@ import com.example.exceptions.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -65,13 +65,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * In case we need to update existing Employee entity in database
+     * In case we need to update existing Employee entity in database. Using query because we dont need to add entity if
+     * it doesn't contains in DB
      *
      * @param employee - entity of Employee we need to update
      * @return Number of updated records
      */
+    @Transactional
     @Override
-    public long updateEmployee(Employee employee) {
+    public long updateEmployee(Employee employee) throws DataNotFoundException {
         return dao.updateEmployee(employee);
     }
 }
