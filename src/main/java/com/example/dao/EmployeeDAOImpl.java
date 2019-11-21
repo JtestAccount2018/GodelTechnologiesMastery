@@ -38,9 +38,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
   }
 
   @Override
-  public long updateEmployee(Employee employee) {
+  public long updateEmployee(Employee employee) throws DataNotFoundException {
 
-    return repository.updateEmployeeById(
+    int result = repository.updateEmployeeById(
         employee.getFirst_name(),
         employee.getLast_name(),
         employee.getDate_of_birth(),
@@ -48,5 +48,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         employee.getGender(),
         employee.getJob_title(),
         employee.getEmployee_id());
+    if(result==0){
+        throw  new DataNotFoundException("You try to change entity that does not exist");
+    }
+    return result;
   }
 }

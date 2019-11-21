@@ -65,7 +65,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void updateEmployeeTest() {
+    void updateEmployeeTest() throws DataNotFoundException {
         long result;
         Mockito.doReturn(1l).when(dao).updateEmployee(employee);
         result = service.updateEmployee(employee);

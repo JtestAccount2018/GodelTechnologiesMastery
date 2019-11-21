@@ -41,7 +41,7 @@ class EmployeeControllerTest {
   private static Employee employee;
 
   @BeforeAll
-  private static void setEmployee() {
+  private static void setTestEmployeeEntity() {
     employee =
         Employee.builder()
             .first_name("Test")
@@ -59,7 +59,7 @@ class EmployeeControllerTest {
     List<Employee> allEmployees = Arrays.asList(employee);
     given(service.getAllEmployee()).willReturn(allEmployees);
 
-    mvc.perform(get("/main/employees").contentType(MediaType.APPLICATION_JSON))
+    mvc.perform(get("/employees").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(1)))
         .andExpect(jsonPath("$[0].first_name", is(employee.getFirst_name())));
@@ -68,7 +68,7 @@ class EmployeeControllerTest {
   @Test
   void getEmployeeByIdTest() throws Exception {
     given(service.getEmployeeById(1)).willReturn(employee);
-    mvc.perform(get("/main/employees/1").contentType(MediaType.APPLICATION_JSON))
+    mvc.perform(get("/employees/1").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("employee_id", is(1)))
         .andExpect(jsonPath("first_name", is(employee.getFirst_name())));
@@ -79,7 +79,7 @@ class EmployeeControllerTest {
 
     given(service.addEmployee(employee)).willReturn("Entity was send to queue");
     mvc.perform(
-            post("/main/employees")
+            post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(employee)))
         .andExpect(status().isCreated())
@@ -91,7 +91,7 @@ class EmployeeControllerTest {
   void editEmployeeTest() throws Exception {
     given(service.updateEmployee(employee)).willReturn(1l);
     mvc.perform(
-            put("/main/employees/1")
+            put("/employees/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(employee)))
         .andExpect(status().isAccepted())
@@ -101,7 +101,7 @@ class EmployeeControllerTest {
   @Test
   void deleteEmployeeTest() throws Exception {
     given(service.deleteEmployeeById(1)).willReturn("success");
-    mvc.perform(delete("/main/employees/1").contentType(MediaType.APPLICATION_JSON))
+    mvc.perform(delete("/employees/1").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("success")));
   }
