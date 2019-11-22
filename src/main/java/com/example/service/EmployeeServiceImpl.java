@@ -4,7 +4,6 @@ import com.example.dao.EmployeeDAO;
 import com.example.dto.Employee;
 import com.example.exceptions.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,7 +16,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDAO dao;
 
     @Autowired
-    private JmsTemplate jmsTemplate;
+    private MessageSender sender;
 
     /**
      * In case we have many entities of Employee, use this function to get them all.
@@ -60,7 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public String addEmployee(Employee employee) {
         employee.setEmployee_id(0);
-        jmsTemplate.convertAndSend("OrderQueue", employee);
+        sender.sendMessage("OrderQueue", employee);
         return "Entity was send to queue";
     }
 

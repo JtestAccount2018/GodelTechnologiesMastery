@@ -26,7 +26,7 @@ class EmployeeServiceImplTest {
     EmployeeDAO dao;
 
     @MockBean
-    private JmsTemplate jmsTemplate;
+    MessageSender sender;
 
     @MockBean
     Employee employee;
