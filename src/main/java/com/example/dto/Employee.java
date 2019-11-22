@@ -10,6 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -38,15 +43,19 @@ public class Employee {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "employee_id")
+  @Min(0)
   private long employee_id;
 
   @Column(name = "first_name")
+  @Size(min = 2, max = 60)
   private String first_name;
 
   @Column(name = "last_name")
+  @Size(min = 2, max = 60)
   private String last_name;
 
   @Column(name = "department_id")
+  @Min(message = "Must be greater than 0", value = 0)
   private long department_id;
 
   @Column(name = "job_title")
@@ -54,9 +63,11 @@ public class Employee {
 
   @Column(name = "gender")
   @Enumerated(EnumType.STRING)
+  @NotNull
   private Gender gender;
 
   @Temporal(value = TemporalType.DATE)
   @Column(name = "date_of_birth")
+  @Past
   private Date date_of_birth;
 }

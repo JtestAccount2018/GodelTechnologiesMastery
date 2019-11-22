@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Log4j2
@@ -37,7 +38,7 @@ public class EmployeeController {
     @ApiOperation(value = "View status of adding employee in queue in JMS", response = String.class)
     @PostMapping("/employees")
     @ResponseStatus(HttpStatus.CREATED)
-    public String addEmployee(@RequestBody Employee employee) {
+    public String addEmployee(@Valid @RequestBody Employee employee) {
         log.debug("rest: ADD - {}", employee);
         return service.addEmployee(employee);
     }
@@ -46,7 +47,7 @@ public class EmployeeController {
     @ApiOperation(value = "View number 1 if updating employee exists and updated successfully")
     @PutMapping("/employees/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public long editEmployee(@PathVariable("id") long id, @RequestBody Employee employee) throws DataNotFoundException {
+    public long editEmployee(@PathVariable("id") long id, @Valid @RequestBody Employee employee) throws DataNotFoundException {
         employee.setEmployee_id(id);
         log.debug("rest: UPDATE  - {}", employee);
         return service.updateEmployee(employee);
