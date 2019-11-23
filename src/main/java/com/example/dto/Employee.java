@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.example.Validation.MinYearsAgo;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -48,14 +49,16 @@ public class Employee {
 
   @Column(name = "first_name")
   @Size(min = 2, max = 60)
+  @NotBlank
   private String first_name;
 
   @Column(name = "last_name")
   @Size(min = 2, max = 60)
+  @NotBlank
   private String last_name;
 
   @Column(name = "department_id")
-  @Min(message = "Must be greater than 0", value = 0)
+  @Min(value = 1, message = "Should be equals to 1 or greater")
   private long department_id;
 
   @Column(name = "job_title")
@@ -68,6 +71,7 @@ public class Employee {
 
   @Temporal(value = TemporalType.DATE)
   @Column(name = "date_of_birth")
+  @MinYearsAgo(years = 16)
   @Past
   private Date date_of_birth;
 }

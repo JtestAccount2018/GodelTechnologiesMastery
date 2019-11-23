@@ -46,7 +46,7 @@ class EmployeeControllerTest {
         Employee.builder()
             .first_name("Test")
             .last_name("test")
-            .department_id(0)
+            .department_id(1)
             .job_title("do test")
             .gender(Gender.FEMALE)
             .date_of_birth(new Date(new GregorianCalendar(1999, 10, 11).getTime().getTime()))

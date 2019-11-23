@@ -2,11 +2,13 @@ package com.example.rest;
 
 import com.example.exceptions.DataNotFoundException;
 import com.fasterxml.jackson.core.JsonParseException;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -55,8 +57,9 @@ public class EmployeeErrorHandler {
     @ResponseBody
     public String invalidDataReceived(MethodArgumentNotValidException e){
         BindingResult result = e.getBindingResult();
+        List<FieldError> fieldErrors = result.getFieldErrors();
         StringBuilder message =  new StringBuilder();
-        result.getAllErrors().forEach(z->message.append(z.getDefaultMessage()+"\r\n"));
+        fieldErrors.forEach(z->message.append(z.getField()+ " - " + z.getDefaultMessage()+"\r\n"));
         log.error("Data received from request is invalid, validator message is: {}", message);
         return message.toString();
     }
