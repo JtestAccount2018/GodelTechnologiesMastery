@@ -1,23 +1,25 @@
 package com.example.dao;
 
-import com.example.ApplicationRunner;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.example.dto.Employee;
 import com.example.dto.Gender;
 import com.example.exceptions.DataNotFoundException;
-import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * DAO tests run with different DB defined in application.properties file located in TEST RESOURCES
@@ -25,12 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Sql({"/schema.sql", "/data.sql"})
 @Log4j2
-@SpringBootTest(classes = ApplicationRunner.class)
-@Transactional
+@ExtendWith(SpringExtension.class)
+@DataJpaTest(properties = "application.properties")
+@AutoConfigureTestDatabase(replace = Replace.NONE)
+@ContextConfiguration(classes = EmployeeDAOImplTestConfig.class)
 class EmployeeDAOImplTest {
 
-  @Autowired
-  private EmployeeDAO dao;
+  @Autowired private EmployeeDAO dao;
 
   @Test
   void getAllEmployee_AssertGetThreeEmployeesFromTestDb_Test() throws DataNotFoundException {
@@ -66,7 +69,6 @@ class EmployeeDAOImplTest {
     long id = dao.addEmployee(employee);
     assertTrue(id > 1);
     log.debug("id is {}", id);
-
   }
 
   @Test
@@ -81,7 +83,7 @@ class EmployeeDAOImplTest {
             .gender(Gender.FEMALE)
             .date_of_birth(new Date(new GregorianCalendar(1962, 05, 02).getTime().getTime()))
             .build();
-        employee.setEmployee_id(1);
+    employee.setEmployee_id(1);
     assertTrue(dao.updateEmployee(employee) > 0);
   }
 }
