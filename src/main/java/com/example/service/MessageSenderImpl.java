@@ -16,7 +16,7 @@ public class MessageSenderImpl implements MessageSender {
 
     @Override
     public void sendMessage(String queue, Employee employee) {
-       log.info("Message sends in queue {}, value is: {}", queue, employee);
-        template.convertAndSend(queue,employee);
+        log.info("Message sends in queue {}, value is: {}", queue, employee);
+        template.convertAndSend(queue, employee);
     }
 }
