@@ -2,9 +2,9 @@ package com.example.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.ApplicationRunner;
 import com.example.dao.EmployeeDAO;
 import com.example.dto.Employee;
+import com.example.exceptions.DataNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -13,20 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SpringBootTest(classes = ApplicationRunner.class)
+@SpringBootTest(classes = EmployeeServiceImplTestConfig.class)
 class EmployeeServiceImplTest {
 
-  @Autowired
-  EmployeeService service;
+  @Autowired EmployeeService service;
 
-  @MockBean
-  EmployeeDAO dao;
+  @MockBean EmployeeDAO dao;
 
-  @MockBean
-  Employee employee;
+  @MockBean MessageSender sender;
+
+  @MockBean Employee employee;
 
   @Test
-  void getAllEmployeeTest() {
+  void getAllEmployeeTest() throws DataNotFoundException {
     List<Employee> list;
     Mockito.doReturn(Arrays.asList(employee)).when(dao).getAllEmployee();
     list = service.getAllEmployee();
@@ -36,7 +35,7 @@ class EmployeeServiceImplTest {
   }
 
   @Test
-  void getEmployeeByIdTest() {
+  void getEmployeeByIdTest() throws DataNotFoundException {
     Employee result;
     Mockito.doReturn(employee).when(dao).getEmployeeById(1);
     result = service.getEmployeeById(1);
@@ -45,24 +44,23 @@ class EmployeeServiceImplTest {
 
   @Test
   void deleteEmployeeByIdTest() {
-    int result;
-    Mockito.doReturn(1).when(dao).deleteEmployeeById(1);
+    String result;
+    Mockito.doReturn("deleted").when(dao).deleteEmployeeById(1);
     result = service.deleteEmployeeById(1);
-    assertTrue(result == 1);
+    assertTrue(result.equals("deleted"));
   }
 
   @Test
   void addEmployeeTest() {
-    long result;
-    Mockito.doReturn(22l).when(dao).addEmployee(employee);
+    String result;
     result = service.addEmployee(employee);
-    assertTrue(result == 22);
+    assertTrue(result.equals("Entity was send to queue"));
   }
 
   @Test
-  void updateEmployeeTest() {
-    int result;
-    Mockito.doReturn(1).when(dao).updateEmployee(employee);
+  void updateEmployeeTest() throws DataNotFoundException {
+    long result;
+    Mockito.doReturn(1l).when(dao).updateEmployee(employee);
     result = service.updateEmployee(employee);
     assertTrue(result == 1);
   }

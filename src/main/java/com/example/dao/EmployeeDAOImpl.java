@@ -1,125 +1,59 @@
 package com.example.dao;
 
 import com.example.dto.Employee;
-import com.example.dto.Gender;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import com.example.exceptions.DataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-@PropertySource("classpath:/EmployeeDao.properties")
-@Repository
+import java.util.List;
+import java.util.Optional;
+
+@Service
 public class EmployeeDAOImpl implements EmployeeDAO {
 
-  @Autowired
-  private NamedParameterJdbcTemplate template;
-
-  static final String EMPLOYEE_ID = "employee_id";
-  static final String FIRST_NAME = "first_name";
-  static final String LAST_NAME = "last_name";
-  static final String DEPARTMENT_ID = "department_id";
-  static final String JOB_TITLE = "job_title";
-  static final String GENDER = "gender";
-  static final String DATE_OF_BIRTH = "date_of_birth";
-
-  @Value("${empl.select}")
-  private String getAllEmplSql;
-
-  @Value("${empl.selectbyid}")
-  private String getEmployeeByIdSql;
-
-  @Value("${empl.delete}")
-  private String deleteEmplSql;
-
-  @Value("${empl.add}")
-  private String addEmplSql;
-
-  @Value("${empl.update}")
-  private String updateEmplSql;
-
-  @Override
-  public List<Employee> getAllEmployee() {
-    return template.query(getAllEmplSql, new MyMapper());
-  }
-
-  @Override
-  public Employee getEmployeeById(long id) {
-    SqlParameterSource parameter = new MapSqlParameterSource(EMPLOYEE_ID, id);
-    return template.query(getEmployeeByIdSql, parameter, new MyExtractor());
-  }
-
-  @Override
-  public int deleteEmployeeById(long id) {
-    SqlParameterSource parameterSource = new MapSqlParameterSource(EMPLOYEE_ID, id);
-    return template.update(deleteEmplSql, parameterSource);
-  }
-
-  @Override
-  public long addEmployee(Employee employee) {
-    KeyHolder keyHolder = new GeneratedKeyHolder();
-    MapSqlParameterSource parameterSource = getParameters(employee);
-    template.update(addEmplSql, parameterSource, keyHolder, new String[] {EMPLOYEE_ID});
-    return keyHolder.getKey().longValue();
-  }
-
-  @Override
-  public int updateEmployee(Employee employee) {
-    MapSqlParameterSource parameterSource = getParameters(employee);
-    parameterSource.addValue(EMPLOYEE_ID, employee.getEmployee_id());
-    return template.update(updateEmplSql, parameterSource);
-  }
-
-  private class MyMapper implements RowMapper<Employee> {
+    @Autowired
+    private EmployeeJpaDataRepository repository;
 
     @Override
-    public Employee mapRow(ResultSet resultSet, int i) throws SQLException {
-
-      return buildEmpl(resultSet);
+    public List<Employee> getAllEmployee() throws DataNotFoundException {
+        List<Employee> employees = repository.findAll();
+        if (employees.size() > 0) return employees;
+        throw new DataNotFoundException("No employees stored in DB");
     }
-  }
-
-  private class MyExtractor implements ResultSetExtractor<Employee> {
 
     @Override
-    public Employee extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-      while (resultSet.next()) {
-        return buildEmpl(resultSet);
-      }
-      return null;
+    public Employee getEmployeeById(long id) throws DataNotFoundException {
+        Optional<Employee> employee = repository.findById(id);
+        return employee.orElseThrow(
+            () -> new DataNotFoundException("No employee found with id =" + id));
     }
-  }
 
-  private Employee buildEmpl(ResultSet resultSet) throws SQLException, DataAccessException {
-    return Employee.builder()
-        .employee_id(resultSet.getLong(EMPLOYEE_ID))
-        .first_name(resultSet.getString(FIRST_NAME))
-        .last_name(resultSet.getString(LAST_NAME))
-        .department_id(resultSet.getLong(DEPARTMENT_ID))
-        .job_title(resultSet.getString(JOB_TITLE))
-        .gender(Gender.valueOf(resultSet.getString(GENDER)))
-        .date_of_birth(resultSet.getDate(DATE_OF_BIRTH))
-        .build();
-  }
+    @Override
+    public String deleteEmployeeById(long id) {
+        repository.deleteById(id);
+        return "deleted";
+    }
 
-  private MapSqlParameterSource getParameters(Employee employee) {
-    MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-    parameterSource.addValue(FIRST_NAME, employee.getFirst_name());
-    parameterSource.addValue(LAST_NAME, employee.getLast_name());
-    parameterSource.addValue(DEPARTMENT_ID, employee.getDepartment_id());
-    parameterSource.addValue(JOB_TITLE, employee.getJob_title());
-    parameterSource.addValue(GENDER, employee.getGender().toString());
-    parameterSource.addValue(DATE_OF_BIRTH, employee.getDate_of_birth());
-    return parameterSource;
-  }
+    @Override
+    public long addEmployee(Employee employee) {
+        return repository.save(employee).getEmployee_id();
+    }
+
+    @Override
+    public long updateEmployee(Employee employee) throws DataNotFoundException {
+
+        int result =
+            repository.updateEmployeeById(
+                employee.getFirst_name(),
+                employee.getLast_name(),
+                employee.getDate_of_birth(),
+                employee.getDepartment_id(),
+                employee.getGender(),
+                employee.getJob_title(),
+                employee.getEmployee_id());
+        if (result == 0) {
+            throw new DataNotFoundException("You try to change entity that does not exist");
+        }
+        return result;
+    }
 }
