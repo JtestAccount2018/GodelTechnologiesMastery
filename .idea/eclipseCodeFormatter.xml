@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EclipseCodeFormatterProjectSettings">
+    <option name="projectSpecificProfile">
+      <ProjectSpecificProfile>
+        <option name="formatter" value="ECLIPSE" />
+      </ProjectSpecificProfile>
+    </option>
+    <option name="selectedGlobalProfile">
+      <Settings>
+        <option name="formatter" value="ECLIPSE" />
+        <option name="id" value="1576244849235" />
+        <option name="name" value="work" />
+        <option name="pathToConfigFileJava" value="$USER_HOME$/Downloads/FU-Formatter-v4.xml" />
+        <option name="selectedJavaProfile" value="FU-Formatter-v4" />
+      </Settings>
+    </option>
+  </component>
+</project>
